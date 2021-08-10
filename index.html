@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Price Kaleidoscope</title>
+    <link rel="shortcut icon" href="images/geo-logo.png">
+    <meta name="description" content="d3-voronoi-treemap plugin to remake 'The Costs of Being Fat, in Actual Dollars'">
+    <script src="https://d3js.org/d3.v6.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://rawcdn.githack.com/Kcnarf/d3-weighted-voronoi/v1.0.1/build/d3-weighted-voronoi.js"></script>
+    <script src="https://rawcdn.githack.com/Kcnarf/d3-voronoi-map/v2.0.1/build/d3-voronoi-map.js"></script>
+    <script src="https://rawcdn.githack.com/Kcnarf/d3-voronoi-treemap/v1.1.1/build/d3-voronoi-treemap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.min.js"></script>
+  </head>
+  <body>
+    <header class="bg-gray-200">
+      <div id="geoHeading" class="container mx-auto flex justify-between">
+          <img src="images/geo-logo.png" class="w-24 lg:h-16 lg:w-32 lg:h-24">
+          <h1 class="text-base text-center text-red-500 font-bold lg:mt-5  md:text-2xl lg:text-3xl">ფასების კალეიდოსკოპი</h1>
+          <button id="eng" class="bg-gray-300 mt-2 w-20 h-10 rounded-xl lg:mt-5 font-semibold text-red-400 duration-500 hover:text-gray-300 hover:bg-red-500">Eng</button>
+      </div>
+      <div id="heading" class="hidden container mx-auto flex justify-between">
+        <img src="images/logo-eng.png" class="w-24 lg:h-16 lg:w-32 lg:h-24">
+        <h1 class="text-base text-center text-red-500 font-bold lg:mt-5  md:text-2xl lg:text-3xl">Price Kaleidoscope</h1>
+        <button id="geo" class="bg-gray-300 mt-2 w-20 h-10 rounded-xl lg:mt-5 font-semibold text-red-400 duration-500 hover:text-gray-300 hover:bg-red-500">Geo</button>
+    </div>
+  </header>
+
+  <section class="container mx-auto lg:flex lg:justify-between mb-12">
+      <section id="engSection" class="hidden inline-flex">
+        <div>
+            <div class="flex mt-3">
+                <img src="images/grocery.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div id="grocery" class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">GROCERY</div>
+                    <p class="text-xs text-gray-500">Food, Non-Alcoholic Beverages</p>
+                    <p class="text-xs">Group Weight: 32.16%</p>
+                    <p class="text-xs">Price Change: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/wine.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">ALCOHOLIC BEVERAGES <br> AND TOBACCO</div>
+                    <p class="text-xs text-gray-500">Alcoholic Beverages, Tobacco</p>
+                    <p class="text-xs">Group Weight: 6.39%</p>
+                    <p class="text-xs">Price Change: 7.13%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/tshirt.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">CLOTHING AND FOOTWEAR</div>
+                    <p class="text-xs text-gray-500">Clothing,Footwear</p>
+                    <p class="text-xs">Group Weight: 3.78 %</p>
+                    <p class="text-xs">Price Change: 1.66%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/house.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">HOUSING, WATER, ELECTRICITY,
+                       <br> GAS AND OTHER FUELS</div>
+                    <p class="text-xs text-gray-500">Actual rentals for housing; Maintenance and
+                        <br> repair of the dwelling; Water supply and 
+                        <br>  miscellaneous services relating to the dwelling;
+                        <br> Electricity, gas and other fuels</p>
+                    <p class="text-xs">Group Weight: 9.03 %</p>
+                    <p class="text-xs">Price Change: 11.06%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/furnitures.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">HOUSEHOLD EQUIPMENT</div>
+                    <p class="text-xs text-gray-500">Furniture, furnishings, etc.; Household textiles;
+                        <br>Household appliances; Glassware, tableware and
+                        <br>household utensils.</p>
+                    <p class="text-xs">Group Weight: 5.31 %</p>
+                    <p class="text-xs">Price Change: 11.54%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/healthcare.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">HEALTHCARE</div>
+                    <p class="text-xs text-gray-500">Medical products, appliances and equipment; Out-
+                        <br> patient services;Hospital services </p>
+                    <p class="text-xs">Group Weight: 7.76 %</p>
+                    <p class="text-xs">Price Change: 11.42%</p>
+                </div>
+            </div>
+        </div>
+      </section>
+      <section id="geoSection" class="inline-flex justify-start">
+        <div>
+            <div class="flex mt-6">
+                <img src="images/grocery.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div id="1" class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-300">სურსათი</div>
+                    <p class="text-xs text-gray-500">სურსათი, უალკოჰოლო სასმელები</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/wine.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">ალკოჰოლური სასმელები</div>
+                    <p class="text-xs text-gray-500">ალკოჰოლური სასმელები</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/tshirt.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">ტანსაცმელი</div>
+                    <p class="text-xs text-gray-500">ტანსაცმელი და ფეხსაცმელი</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/house.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">სახლი და კომუნალური
+                        <br>გადასახადები</div>
+                    <p class="text-xs text-gray-500">გადასახადი საცხოვრებელზე;
+                        <br> ელექტროენერგია, აირი და სათბობის
+                        <br> სხვა სახეები; წყალმომარაგება; 
+                        <br> საცხოვრებლის მოვლა-შეკეთება 
+                        <br>და სხვა</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/furnitures.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">საოჯახო ნივთები</div>
+                    <p class="text-xs text-gray-500">ავეჯი და საოჯახო ნივთები; 
+                        <br>საყოფაცხოვრებო საქონელი; მაცივრები, 
+                        <br>სარეცხი მანქანები; ჭურჭელი, და სხვა.</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+            <div class="flex mt-4">
+                <img src="images/healthcare.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">ჯანმრთელობის დაცვა</div>
+                    <p class="text-xs text-gray-500">მედიკამენტები, სამედიცინო პროდუქცია; 
+                        <br>სამედიცინო მომსახურება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+            </div>
+        </div>
+      </section>
+
+
+      
+  <section class="inline-flex justify-center">
+    <div >
+        <svg></svg>
+        <div class="ml-24 mt-12">
+          <div class="w-44 h-4 bg-gradient-to-r from-gray-600 via-white to-red-600"></div>
+          <div class="text-xs flex space-x-2 w-44">
+              <div>-24</div>
+              <div>-12</div> 
+              <div>-6</div>
+              <div>-2</div>
+              <div>0</div> 
+              <div>2</div>
+              <div>6</div>
+              <div>12</div>
+              <div>24</div>
+        </div> 
+      </div>
+
+  </section>
+    
+      <section id="engSection1" class="hidden inline-flex">
+        <div>
+            <div class="flex mt-6">
+                <img src="images/car.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">TRANSPORT</div>
+                    <p class="text-xs text-gray-500"> Purchase of vehicles; Operation of personal
+                        <br> transport equipment; Transport services</p>
+                    <p class="text-xs">Group Weight: 12.99 %</p>
+                    <p class="text-xs">Price Change: 22.55%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/global-network.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">COMMUNICATION</div>
+                    <p class="text-xs text-gray-500">Telephone and telefax equipment; 
+                         <br>  Telephone and telefax services</p>
+                    <p class="text-xs">Group Weight: 3.63 %</p>
+                    <p class="text-xs">Price Change: -0.76%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/travel.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">RECREATION AND CULTURE</div>
+                    <p class="text-xs text-gray-500"> Audio-visual and information processing
+                        <br> equipment; Other major durables for recreation
+                        <br> and culture;Other recreational items and equipment,
+                        <br> gardens and pets;Recreational and cultural services</p>
+                    <p class="text-xs">Group Weight: 3.67 %</p>
+                    <p class="text-xs">Price Change: 4.72%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/education.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">EDUCATION</div>
+                    <p class="text-xs text-gray-500">Pre-primary and primary education; Secondary
+                        <br>education;Post-secondary non-tertiary education; </p>
+                    <p class="text-xs">Group Weight: 4.55 %</p>
+                    <p class="text-xs">Price Change: 1.57%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/cutlery.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500"> HOTELS, CAFES AND <br> RESTAURANTS </div>
+                    <p class="text-xs text-gray-500">Catering services;Accommodation services</p>
+                    <p class="text-xs">Group Weight: 5.42 %</p>
+                    <p class="text-xs">Price Change: 10.24%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/customer.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500"> MISCELLANEOUS GOODS  <br> AND SERVICES</div>
+                    <p class="text-xs text-gray-500"> Personal care;Personal effects n.e.c.;
+                        <br>Insurance;Financial services; Other services </p>
+                    <p class="text-xs">Group Weight: 5.31 %</p>
+                    <p class="text-xs">Price Change: 6.02%</p>
+                </div>
+               
+            </div>
+        </div>
+      </section>
+    
+      <section id="geoSection1" class="inline-flex">
+        <div>
+            <div class="flex mt-6">
+                <img src="images/car.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">ტრანსპორტი</div>
+                    <p class="text-xs text-gray-500">სატრანსპორტო საშუალებების შეძენა, <br> და ექსპლუატაცია; სატრანსპორტო მომსახურება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/global-network.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base font-semibold cursor-pointer transform hover:scale-105 duration-500">კავშირგაბმულობა</div>
+                    <p class="text-xs text-gray-500">სატელეფონო მოწყობილობები <br> და საკომუნიკაციო მომსახურება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/travel.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">დასვენება, გართობა, კულტურა</div>
+                    <p class="text-xs text-gray-500">ფოტოგრაფიული და კომპიუტერული მოწყობილობები;
+                        <br> გასართობი და კულტურული მომსახურება;
+                        <br> ტურისტული მოგზაურობა; დასვენების, 
+                        <br> გართობისა და კულტურის სფეროს საქონელი და სხვა</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/education.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">განათლება</div>
+                    <p class="text-xs text-gray-500">სკოლამდელი, დაწყებითი, საშუალო და უმაღლესი <br> განათლება,დონით განუსაზღვრელი განათლება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/cutlery.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">სასტუმროები, კაფეები<br> და რესტორნები</div>
+                    <p class="text-xs text-gray-500">რესტორნების, კაფეებისა <br> და სასტუმროების მომსახურება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+                
+            </div>
+            <div class="flex mt-4">
+                <img src="images/customer.png" class="w-12 h-12 mt-3">
+                <div class="pl-6">
+                    <div class="text-base text-left font-semibold cursor-pointer transform hover:scale-105 duration-500">სხვადასხვა საქონელი <br> და მომსახურება</div>
+                    <p class="text-xs text-gray-500">პირადი ჰიგიენა; პირადი ნივთები; <br> ჯანმრთელობის დაზღვევა; საფინანსო მომსახურება</p>
+                    <p class="text-xs">ჯგუფის წონა: 32.16%</p>
+                    <p class="text-xs">ფასის ცვლილება: 14.08%</p>
+                </div>
+               
+            </div>
+        </div>
+      </section>
+  </section>
+
+
+
+
+    <footer class="w-full footer-background border-t-2 border-solid border-black pb-6 flex flex-col justify-center pt-4">
+        <div id="geoFooter" class="text-center text-white text-xs">
+            <p>© 2019 ყველა უფლება დაცულია.</p>
+            <p>საქართველოს სტატისტიკის ეროვნული სამსახური (საქსტატი)</p>
+        </div>
+
+        <div id="engFooter" class="hidden text-center text-white text-xs">
+            <p>© 2019 All rights reserved.</p> 
+            <p>National Statistics Office of Georgia (Geostat)</p>
+        </div>
+
+        <div class="flex justify-center space-x-12 mt-8">
+            <a href="https://www.geostat.ge/ka" target="_blank">
+                <img src="./images/geo-logo.png" class="w-8 h-8">
+            </a>
+
+            <a href="https://www.facebook.com/sharer/sharer.php?kid_directed_site=0&sdk=joey&u=http%3A%2F%2Fkaleidoscope.geostat.ge%2Fkaleidoscope&display=popup&ref=plugin&src=share_button" target="_blank">
+                <img src="./images/fb.png" class="w-6 h-6">
+            </a>
+            
+            <a href="https://twitter.com/intent/tweet?original_referer=http%3A%2F%2Fkaleidoscope.geostat.ge%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&text=%E1%83%A4%E1%83%90%E1%83%A1%E1%83%94%E1%83%91%E1%83%98%E1%83%A1%20%E1%83%99%E1%83%90%E1%83%9A%E1%83%94%E1%83%98%E1%83%93%E1%83%9D%E1%83%A1%E1%83%99%E1%83%9D%E1%83%9E%E1%83%98&url=http%3A%2F%2Fkaleidoscope.geostat.ge%2Fkaleidoscope%2Findex.php%3Flang%3Dka" target="_blank">
+                <img src="./images/twitter.png" class="w-6 h-6">
+            </a>
+            
+        </div>
+
+    </footer>
+ 
+  <script src="kaleidoscope.js"></script>
+  </body>
+</html>

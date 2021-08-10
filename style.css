@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+  
+.cell {
+  stroke: white;
+  stroke-width: 1px;
+}
+
+.hoverer {
+  fill: transparent;
+  stroke: white;
+  stroke-width:0px;
+}
+
+.hoverer:hover {
+  stroke-width: 3px;
+}
+
+.footer-background{
+  background-color: #36394b;
+}
